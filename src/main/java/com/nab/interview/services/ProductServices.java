@@ -21,7 +21,11 @@ public class ProductServices implements IProductServices {
     @Autowired
     ProductRepository productRepository;
 
+    /**
+     * @return
+     */
     public List<ProductResponse> getAllProducts() {
+
         List<ProductEntity> productEntities = productRepository.findAll();
         List<ProductResponse> productResponses = null;
         if (productEntities != null && productEntities.size() > 0) {
@@ -36,7 +40,12 @@ public class ProductServices implements IProductServices {
 
     }
 
+    /**
+     * @param category
+     * @return
+     */
     public List<ProductResponse> getProductByCategory(String category) {
+
         List<ProductEntity> productEntities = productRepository.findByCategory(category);
         List<ProductResponse> productResponses = null;
         if (!CollectionUtils.isEmpty(productEntities)) {
@@ -49,11 +58,16 @@ public class ProductServices implements IProductServices {
 
             }
         } else {
+            logger.error("No Product exist for given id");
             throw new ServiceException("No Product exist for given id");
         }
         return productResponses;
     }
 
+    /**
+     * @param response
+     * @return
+     */
     public ProductResponse createOrUpdateProduct(ProductResponse response) {
 
 
@@ -88,12 +102,18 @@ public class ProductServices implements IProductServices {
         return productResponse;
     }
 
+    /**
+     * @param id
+     * @return
+     */
     public String deleteProductById(Long id) {
+
         Optional<ProductEntity> productEntity = productRepository.findById(id);
         if (productEntity.isPresent()) {
             productRepository.deleteById(id);
             return "Product deleted";
         } else {
+            logger.error("No record found in deleteProductById");
             throw new ServiceException("No Product exist for given id:" + id);
         }
     }
