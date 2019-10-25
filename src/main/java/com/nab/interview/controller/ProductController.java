@@ -1,5 +1,6 @@
 package com.nab.interview.controller;
 
+import com.nab.interview.api.CategoryResponse;
 import com.nab.interview.api.ProductResponse;
 import com.nab.interview.services.IProductServices;
 import org.jboss.logging.Logger;
@@ -46,7 +47,7 @@ public class ProductController {
      * @param id
      * @return
      */
-    @DeleteMapping("/product/{id}")
+    @DeleteMapping(value ="/product/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteProduct(@PathVariable("id") Long id) {
 
         logger.debug("entering deleteProduct");
@@ -62,6 +63,18 @@ public class ProductController {
 
         logger.debug("entering getProductsByCategory");
         List<ProductResponse> result = productServices.getProductByCategory(category);
+        return result;
+    }
+
+
+    /**
+     * @return
+     */
+    @GetMapping(value = "/categories", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<CategoryResponse> getCategoryList() {
+
+        logger.debug("entering getCategoryList");
+        List<CategoryResponse> result = productServices.getCategoryList();
         return result;
     }
 

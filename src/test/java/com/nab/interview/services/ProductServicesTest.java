@@ -52,7 +52,7 @@ public class ProductServicesTest {
     @Test
     public void getProductByCategoryValidTest() {
 
-        Mockito.when(productRepository.findByCategory("test"))
+        Mockito.when(productRepository.findProductByCategory("test"))
                 .thenReturn(JsonUtil.getListOfEntityFromJson(JsonUtil.readJsonFile(validResponsePath)));
 
         List<ProductResponse> response = productServices.getProductByCategory("test");

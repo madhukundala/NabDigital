@@ -1,10 +1,13 @@
 package com.nab.interview.services;
 
+import com.nab.interview.api.CategoryResponse;
 import com.nab.interview.api.ProductResponse;
 import com.nab.interview.exception.ServiceException;
 import com.nab.interview.pojo.ProductEntity;
 import com.nab.interview.repository.ProductRepository;
-import org.jboss.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -16,7 +19,7 @@ import java.util.Optional;
 @Service
 public class ProductServices implements IProductServices {
 
-    Logger logger = Logger.getLogger(ProductServices.class);
+    Logger logger = LoggerFactory.getLogger(ProductServices.class);
 
     @Autowired
     ProductRepository productRepository;
@@ -46,7 +49,7 @@ public class ProductServices implements IProductServices {
      */
     public List<ProductResponse> getProductByCategory(String category) {
 
-        List<ProductEntity> productEntities = productRepository.findByCategory(category);
+        List<ProductEntity> productEntities = productRepository.findProductByCategory(category);
         List<ProductResponse> productResponses = null;
         if (!CollectionUtils.isEmpty(productEntities)) {
             productResponses = new ArrayList<>();
@@ -113,9 +116,30 @@ public class ProductServices implements IProductServices {
             productRepository.deleteById(id);
             return "Product deleted";
         } else {
-            logger.error("No record found in deleteProductById");
+            logger.error("No record found in deleteProductById ::{}",id);
             throw new ServiceException("No Product exist for given id:" + id);
         }
+    }
+
+
+    public List<CategoryResponse> getCategoryList() {
+
+        List<String> res= productRepository.getCategoryList();
+        List<CategoryResponse>  categoryResponses = null;
+        if(!CollectionUtils.isEmpty(res)){
+           categoryResponses = new ArrayList<>();
+            for(String val: res) {
+
+                CategoryResponse categoryResponse = new CategoryResponse();
+
+                categoryResponse.setLabel(val);
+                categoryResponse.setValue(val);
+
+                categoryResponses.add(categoryResponse);
+            }
+
+        }
+        return categoryResponses;
     }
 
 }

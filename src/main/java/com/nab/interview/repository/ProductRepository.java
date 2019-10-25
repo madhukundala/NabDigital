@@ -13,6 +13,10 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
 
     @Query("SELECT u FROM ProductEntity u WHERE u.productCategory = :productCategory")
-    List<ProductEntity> findByCategory(@Param("productCategory") String productCategory);
+    List<ProductEntity> findProductByCategory(@Param("productCategory") String productCategory);
+
+
+    @Query("SELECT DISTINCT u.productCategory FROM ProductEntity u")
+    List<String> getCategoryList();
 
 }
